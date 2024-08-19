@@ -1,0 +1,140 @@
+.linkNavigation {
+    margin-right: 15px;
+    text-decoration: none;
+    color: inherit; /* Використовуємо колір, який визначено темою */
+    margin-top: 5px;
+}
+
+.linkNavigation:hover {
+    text-decoration: none;
+    color: #20bcc6;
+}
+
+.titleColorNav{
+    color: #20bcc6;
+    font-weight: bold ;
+    margin-top: 5px;
+}
+
+
+.characteristics{
+    display: flex;
+    margin-left: 50px;
+    margin-top: 30px;
+}
+
+.titleOriginal{
+    margin-bottom: 30px;
+    font-size: 50px;
+}
+
+
+
+
+.release{
+    margin-bottom: 20px;
+}
+
+
+.releaseDateValue {
+    color: #20bcc6;
+    margin-left: 10px;
+}
+
+.genresContainer {
+    display: flex;
+    gap: 10px; /* Відстань між жанрами */
+    margin-bottom: 10px;
+}
+
+
+
+
+.genreLink {
+    padding: 5px 10px;
+    background-color: #0070f3;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.genreLink:hover {
+    background-color: #005bb5;
+}
+
+
+
+#ImageIDContainer{
+    margin-right: 10%;
+    margin-left: 5%;
+}
+
+
+@media screen and (min-width: 600px) and (max-width: 1200px){
+    #ImageIDContainer {
+        width: 50%;
+        margin: 0 auto;
+    }
+
+    .characteristics {
+        flex-direction: column;
+    }
+
+    .titleOriginal {
+        font-size: 35px;
+    }
+
+}
+
+
+
+@media screen and (max-width: 600px) {
+    .characteristics {
+        margin-left: 20px;
+        margin-right: 20px;
+        flex-direction: column;
+    }
+
+    .titleOriginal {
+        font-size: 30px;
+        margin-bottom: 20px;
+    }
+
+    .release {
+        font-size: 16px;
+    }
+
+    .releaseDateValue {
+        font-size: 16px;
+        margin-left: 5px;
+    }
+
+
+    .imgWeight{
+        margin: 20px;
+        width: 80%;
+        height: auto;
+    }
+
+    .genreLink {
+        font-size: 12px;
+        padding: 5px;
+    }
+
+    .linkNavigation {
+        font-size: 16px;
+    }
+
+    .treeNavigation {
+        flex-direction: column;
+        align-items: center;
+        margin: 10px 0;
+    }
+
+    .titleColorNav {
+        font-size: 18px;
+        text-align: center;
+        margin-top: 10px;
+    }
+}

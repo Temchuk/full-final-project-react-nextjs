@@ -1,95 +1,106 @@
+"use client";
+
 import Image from "next/image";
 import styles from "./page.module.css";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { getAllMovies } from "@/services/api.service";
+import StarRating from "@/components/StarRating";
+
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    const [movies, setMovies] = useState<any[]>([]);
+    const [startIndex, setStartIndex] = useState(0);
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+    useEffect(() => {
+        const fetchMovies = async () => {
+            try {
+                const data = await getAllMovies();
+                setMovies(data.results);
+            } catch (error) {
+                console.error('Error fetching movies:', error);
+            }
+        };
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+        fetchMovies();
+    }, []);
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+    useEffect(() => {
+        const interval = setInterval(() => {
+            handleNext();
+        }, 4000);
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
+        return () => clearInterval(interval);
+    }, [movies]);
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+    const handlePrevious = () => {
+        setStartIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : movies.length - 3));
+    };
+
+    const handleNext = () => {
+        setStartIndex(prevIndex => (prevIndex < movies.length - 3 ? prevIndex + 1 : 0));
+    };
+
+    const visibleMovies = movies.slice(startIndex, startIndex + 3);
+
+    return (
+        <main>
+
+
+            <div className={styles.treeNavigation}>
+                <Link style={{marginRight: '20px'}} href="/" passHref>
+                    <img
+                        src="https://img.icons8.com/flat-round/64/back--v1.png"
+                        alt="Back Arrow Icon"
+                        style={{width: '24px', height: '24px'}}
+                    />
+                </Link>
+
+                <Link className={styles.linkNavigation} style={{color: '#20bcc6'}} href='/'>HOME</Link>
+                <Link className={styles.linkNavigation} style={{color: 'inherit'}} href='/movies'>MOVIES</Link>
+                <Link className={styles.linkNavigation} style={{color: 'inherit'}} href='/genres'>GENRES</Link>
+            </div>
+            <h1 style={{marginLeft: '50px'}}>Novelties of world rental 2024-2022</h1>
+
+            {/* Блок з трьома картинками фільмів та стрілками */}
+            <div className={styles.movieRow}>
+                <button onClick={handlePrevious} className={styles.arrowButton}>
+                    <img
+                        src="https://img.icons8.com/color/96/back--v1.png"
+                        alt="Previous Movie"
+                        className={styles.arrow}
+                    />
+                </button>
+
+                <div className={styles.moviesContainer}>
+                    {visibleMovies.map(movie => (
+
+                        <Link key={movie.id} href={`/movies/${movie.id}`} passHref>
+                            <div className={styles.movieItem}>
+                                <Image
+                                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                                    alt={movie.title}
+                                    width={360}
+                                    height={540}
+                                    className={styles.movieImage}
+                                />
+                                <StarRating rating={movie.vote_average}/>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+
+                <button onClick={handleNext} className={styles.arrowButton}>
+                    <img
+                        src="https://img.icons8.com/color/96/forward.png"
+                        alt="Next Movie"
+                        className={styles.arrow}
+                    />
+                </button>
+            </div>
+
+
+
+        </main>
+    );
 }
